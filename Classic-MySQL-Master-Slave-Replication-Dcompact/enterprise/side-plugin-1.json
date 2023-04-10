@@ -321,7 +321,7 @@
         "info_log_level": "INFO_LEVEL",
         "hoster_root": "/mnt/mynfs/datadir/mytopling-instance-1",
         "instance_name": "mytopling-instance-1",
-        "nfs_mnt_src": "mytopling-instance-1.mytopling.in:/",
+        "nfs_mnt_src": "mytopling-instance-1.mytopling.in:/mnt/mynfs/datadir/mytopling-instance-1",
         "nfs_mnt_opt": "nolock,noatime",
         "web_domain": "mytopling.in",
         "http_workers": [

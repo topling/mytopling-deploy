@@ -268,8 +268,9 @@
         "allow_fallback_to_local": true,
         "info_log_level": "INFO_LEVEL",
         "hoster_root": "/mnt/mynfs/datadir/mytopling-instance-2",
+        "//注意 instance_name全局唯一":"",
         "instance_name": "mytopling-instance-2",
-        "nfs_mnt_src": "mytopling-instance-2.mytopling.in:/",
+        "nfs_mnt_src": "mytopling-instance-2.mytopling.in:/mnt/mynfs/datadir/mytopling-instance-2",
         "nfs_mnt_opt": "nolock,noatime",
         "web_domain": "mytopling.in",
         "http_workers": [
