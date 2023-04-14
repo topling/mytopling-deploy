@@ -8,7 +8,7 @@ fi
 
 MY_HOME=`dirname $0`
 MY_HOME=`realpath $MY_HOME/../../..`
-SCRIPTS_HOME=`dirname $0`
+SCRIPTS_HOME=`realpath $(dirname $0)`
 if [ ! -f $MY_HOME/bin/mysqld ]; then
   echo $0 must be in $SCRIPTS_HOME, file $MY_HOME/bin/mysqld must exits >&2
   exit 1
