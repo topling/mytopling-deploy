@@ -88,6 +88,8 @@ common_args=(
   --transaction_isolation=READ-COMMITTED
   --sync_binlog=0
   --innodb_flush_log_at_trx_commit=2
+  --read_only
+  --replica_parallel_workers=0
 )
 
 rocksdb_args=(
@@ -102,6 +104,7 @@ rocksdb_args=(
   --rocksdb_lock_wait_timeout=10
   --rocksdb_print_snapshot_conflict_queries=1
   --rocksdb_flush_log_at_trx_commit=2
+  --rocksdb_write_disable_wal=ON
 )
 
 binlog_args=(
@@ -109,6 +112,7 @@ binlog_args=(
   # 但此配置下 MyTopling 不能做为传统 MySQL 主从中的上游数据库，因为此
   # 配置下 binlog 只会记录 DDL 操作
   # --binlog-ddl-only=ON
+  --disable-log-bin
   --binlog-order-commits=ON
 )
 

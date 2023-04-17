@@ -8,15 +8,14 @@ fi
 
 MY_HOME=`dirname $0`
 MY_HOME=`realpath $MY_HOME/../../..`
-SCRIPTS_HOME=`realpath $(dirname $0)
-
+SCRIPTS_HOME=`realpath $(dirname $0)`
 if [ ! -f $MY_HOME/bin/mysqld ]; then
   echo $0 must be in $SCRIPTS_HOME, file $MY_HOME/bin/mysqld must exits >&2
   exit 1
 fi
 
 export ROCKSDB_KICK_OUT_OPTIONS_FILE=1
-export TOPLING_SIDEPLUGIN_CONF=$SCRIPTS_HOME/side-plugin-2.json
+export TOPLING_SIDEPLUGIN_CONF=$SCRIPTS_HOME/side-plugin-1.json
 
 export DictZipBlobStore_zipThreads=$((`nproc`/2))
 
@@ -25,8 +24,8 @@ export DictZipBlobStore_zipThreads=$((`nproc`/2))
 export TOPLINGDB_CACHE_SST_FILE_ITER=1
 export BULK_LOAD_DEL_TMP=1
 
-MYTOPLING_DATA_DIR=/mnt/mynfs/datadir/mytopling-instance-2
-MYTOPLING_LOG_DIR=/mnt/mynfs/infolog/mytopling-instance-2
+MYTOPLING_DATA_DIR=/mnt/mynfs/datadir/mytopling-instance-1
+MYTOPLING_LOG_DIR=/mnt/mynfs/infolog/mytopling-instance-1
 rm -rf ${MYTOPLING_DATA_DIR}/.rocksdb/job-*
 if ! getent group mysql >/dev/null; then
   groupadd -g 27 mysql
@@ -34,34 +33,35 @@ fi
 if ! getent passwd mysql >/dev/null; then
   useradd mysql -u 27 -g 27 --no-create-home -s /sbin/nologin
 fi
+
 MYSQL_SOCK_DIR=/var/lib/mysql
 mkdir -p $MYSQL_SOCK_DIR # for sock file
 export LD_LIBRARY_PATH=/mnt/mynfs/opt/lib
-if [ ! -e /mnt/mynfs/datadir/mytopling-instance-2/.rocksdb/IDENTITY ]; then
+if [ ! -e /mnt/mynfs/datadir/mytopling-instance-1/.rocksdb/IDENTITY ]; then
   if [ -e /mnt/mynfs/datadir ]; then
-    echo "Dir '/mnt/mynfs/datadir' exists, but '/mnt/mynfs/datadir/mytopling-instance-2/.rocksdb/IDENTITY' does not exists"
+    echo "Dir '/mnt/mynfs/datadir' exists, but '/mnt/mynfs/datadir/mytopling-instance-1/.rocksdb/IDENTITY' does not exists"
     read -p 'Are you sure delete /mnt/mynfs/datadir and re-initialize database? yes(y)/no(n)' yn
     if [ "$yn" != "y" ]; then
       exit 1
     fi
     rm -rf /mnt/mynfs/{log-bin,wal,infolog}
-    rm -rf /mnt/mynfs/datadir/mytopling-instance-2/* 
-    rm -rf /mnt/mynfs/datadir/mytopling-instance-2/.rocksdb  
+    rm -rf /mnt/mynfs/datadir/mytopling-instance-1/* 
+    rm -rf /mnt/mynfs/datadir/mytopling-instance-1/.rocksdb  
   fi
-  mkdir -p /mnt/mynfs/{datadir,log-bin,wal,infolog}/mytopling-instance-2
-  chown mysql:mysql -R /mnt/mynfs/{datadir,log-bin,wal}/mytopling-instance-2
+  mkdir -p /mnt/mynfs/{datadir,log-bin,wal,infolog}/mytopling-instance-1
+  chown mysql:mysql -R /mnt/mynfs/{datadir,log-bin,wal}/mytopling-instance-1
   /mnt/mynfs/opt/bin/mysqld --initialize-insecure --skip-grant-tables \
-      --datadir=/mnt/mynfs/datadir/mytopling-instance-2
+      --datadir=/mnt/mynfs/datadir/mytopling-instance-1
   mkdir $MYTOPLING_LOG_DIR/stdlog -p
   touch $MYTOPLING_LOG_DIR/stdlog/{stdout,stderr}
-  cp $MY_HOME/shared/web/{index.html,style.css} /mnt/mynfs/infolog/mytopling-instance-2
-  chown mysql:mysql -R /mnt/mynfs/{datadir,log-bin,wal,infolog}/mytopling-instance-2 # must
-  chown mysql:mysql -R $MYSQL_SOCK_DIR
+  cp $MY_HOME/shared/web/{index.html,style.css} /mnt/mynfs/infolog/mytopling-instance-1
+  chown mysql:mysql -R /mnt/mynfs/{datadir,log-bin,wal,infolog}/mytopling-instance-1 # must
+  chown mysql:mysql -R /var/lib/mysql
 fi
 
 
 common_args=(
-  --server-id=2
+  --server-id=1
   --gtid-mode=ON
   --enforce-gtid-consistency=ON
   --socket=$MYSQL_SOCK_DIR/mysql.sock
@@ -114,7 +114,7 @@ binlog_args=(
 
 # 修复引擎监控日志链接
 sudo ln -sf $MYTOPLING_LOG_DIR $MYTOPLING_LOG_DIR/.rocksdb
-sudo ln -sf $MYTOPLING_LOG_DIR/mnt_mynfs_datadir_mytopling-instance-2_.rocksdb_LOG \
+sudo ln -sf $MYTOPLING_LOG_DIR/mnt_mynfs_datadir_mytopling-instance-1_.rocksdb_LOG \
            $MYTOPLING_LOG_DIR/LOG
 rm -rf ${MYTOPLING_DATA_DIR}/.rocksdb/job*
 rm -f /tmp/Topling-*
@@ -130,4 +130,4 @@ $MY_HOME/bin/mysqld ${common_args[@]} ${binlog_args[@]} ${rocksdb_args[@]} $@ \
   2> $MYTOPLING_LOG_DIR/stdlog/stderr &
 sleep 1
 echo mysqld started successfully and put into background
-tail /mnt/mynfs/infolog/mytopling-instance-2/stdlog/stderr
+tail /mnt/mynfs/infolog/mytopling-instance-1/stdlog/stderr
