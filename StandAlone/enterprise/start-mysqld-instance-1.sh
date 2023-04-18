@@ -54,7 +54,7 @@ if [ ! -e /mnt/mynfs/datadir/mytopling-instance-1/.rocksdb/IDENTITY ]; then
       --datadir=/mnt/mynfs/datadir/mytopling-instance-1
   mkdir $MYTOPLING_LOG_DIR/stdlog -p
   touch $MYTOPLING_LOG_DIR/stdlog/{stdout,stderr}
-  cp $MY_HOME/shared/web/{index.html,style.css} /mnt/mynfs/infolog/mytopling-instance-1
+  cp $MY_HOME/share/web/{index.html,style.css} /mnt/mynfs/infolog/mytopling-instance-1
   chown mysql:mysql -R /mnt/mynfs/{datadir,log-bin,wal,infolog}/mytopling-instance-1 # must
   chown mysql:mysql -R /var/lib/mysql
 fi

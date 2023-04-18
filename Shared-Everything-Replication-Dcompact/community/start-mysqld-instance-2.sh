@@ -46,7 +46,7 @@ if [! -d mnt/mynfs/dataidr ];then
   sed -i "%s/^server-uuid.*/server-uuid=`uuidgen`/g" $MYTOPLING_SLAVE_DATA_DIR/auto.cnf
   mkdir $MYTOPLING_LOG_DIR/stdlog -p
   touch $MYTOPLING_LOG_DIR/stdlog/{stdout,stderr}
-  cp $MY_HOME/shared/web/{index.html,style.css} /mnt/mynfs/infolog/mytopling-instance-2
+  cp $MY_HOME/share/web/{index.html,style.css} /mnt/mynfs/infolog/mytopling-instance-2
   chown mysql:mysql -R /mnt/mynfs/{datadir,infolog}/mytopling-instance-2 # must
   chown mysql:mysql -R /var/lib/mysql
 fi
