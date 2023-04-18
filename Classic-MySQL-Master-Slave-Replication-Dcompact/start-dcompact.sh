@@ -1,9 +1,9 @@
 #!/bin/bash
 
 MY_HOME=`dirname $0`
-MY_HOME=`realpath $MY_HOME/..`
+MY_HOME=`realpath $MY_HOME/../..`
 
-export LD_LIBRARY_PATH=$MY_HOME/lib:$MY_HOME/lib/plugin:$MY_HOME/lib/private:$MY_HOME/gcc_12_lib64:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$MY_HOME/lib:$MY_HOME/lib/plugin:$MY_HOME/lib/private:$LD_LIBRARY_PATH
 
 export ROCKSDB_KICK_OUT_OPTIONS_FILE=1
 export MULTI_PROCESS=1

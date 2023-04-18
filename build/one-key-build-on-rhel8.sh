@@ -36,7 +36,7 @@ git clone https://github.com/topling/toplingdb.git --depth 1
 cd toplingdb
 git submodule update --init --recursive
 ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts # silent git
-make -j`nproc` DEBUG_LEVEL=0 shared_lib UPDATE_REPO=0
+make -j`nproc` DEBUG_LEVEL=0 shared_lib
 sudo make install-shared PREFIX=/mnt/mynfs/opt
 
 cd $HOME

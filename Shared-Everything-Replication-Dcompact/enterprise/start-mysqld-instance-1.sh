@@ -124,7 +124,17 @@ sudo sysctl -w fs.nr_open=2097152
 sudo sysctl -w vm.max_map_count=8388608
 ulimit -n 100000  # normal user
 ulimit -n 1000000 # root user
-
+# 检测可执行文件:
+binary_path="/mnt/mynfs/opt/lib/librocksdb.so"
+symbol_name="_ZN7rocksdb10tzb_detail13g_startupTimeE"
+line=`nm -D $binary_path | grep  $symbol_name`
+# Check if the symbol does not exist in the binary file
+if [ $(echo $line | awk '{print NF}') -eq 2 ]; then
+echo -e "\033[1;31mWarning:\033[0m 您正尝试使用社区版二进制文件运行企业版配置文件，联系我们(contact@topling.cn)获取企业版二进制文件"
+echo -e "\033[1;31mWarning:\033[0m You're trying to use a community edition binary file to run an enterprise edition configuration file. Contact us for the correct enterprise edition binary file."
+echo "mailto:contact@topling.cn to get an enterprise version"
+echo ""
+fi
 $MY_HOME/bin/mysqld ${common_args[@]} ${binlog_args[@]} ${rocksdb_args[@]} $@ \
   1> $MYTOPLING_LOG_DIR/stdlog/stdout \
   2> $MYTOPLING_LOG_DIR/stdlog/stderr &
