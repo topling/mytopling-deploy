@@ -279,7 +279,7 @@
       "keep_log_file_num": 100,
       "inplace_update_support": false,
       "WAL_size_limit_MB": 0,
-      "wal_dir": "/mnt/mynfs/wal/mytopling-instance-2",
+      "wal_dir": "/mnt/mynfs/wal/mytopling-instance-1",
       "wbwi_factory": "${cspp}",
       "statistics": "${stat}",
       "allow_mmap_reads": false
@@ -293,7 +293,7 @@
   },
   "databases": {
     ".rocksdb": {
-      "method": "TransactionDB::Open",
+      "method": "TransactionDB::OpenAsSecondary",
       "params": {
         "db_options": "${dbopt}",
         "txn_db_options": {

@@ -214,7 +214,7 @@
   },
   "DBOptions": {
     "dbopt": {
-      "db_log_dir": "/mnt/mynfs/infolog/mytopling-instance-1",
+      "db_log_dir": "/mnt/mynfs/infolog/mytopling-instance-2",
       "allow_fdatasync": false,
       "advise_random_on_open": true,
       "create_if_missing": true,

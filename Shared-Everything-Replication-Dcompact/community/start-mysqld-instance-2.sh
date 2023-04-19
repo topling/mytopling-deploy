@@ -39,11 +39,11 @@ MYSQL_SOCK_DIR=/var/lib/mysql
 mkdir -p $MYSQL_SOCK_DIR # for sock file
 export LD_LIBRARY_PATH=/mnt/mynfs/opt/lib
 
-if [! -d mnt/mynfs/dataidr ];then
+if [ ! -d mnt/mynfs/dataidr/mytopling-instance-2 ];then
   rm -rf /mnt/mynfs/{infolog,datadir}/mytopling-instance-2
   mkdir -p /mnt/mynfs/{datadir,infolog}/mytopling-instance-2
   cp -a $MYTOPLING_DATA_DIR/* $MYTOPLING_SLAVE_DATA_DIR/
-  sed -i "%s/^server-uuid.*/server-uuid=`uuidgen`/g" $MYTOPLING_SLAVE_DATA_DIR/auto.cnf
+  sed -i "s/^server-uuid.*/server-uuid=`uuidgen`/g" $MYTOPLING_SLAVE_DATA_DIR/auto.cnf
   mkdir $MYTOPLING_LOG_DIR/stdlog -p
   touch $MYTOPLING_LOG_DIR/stdlog/{stdout,stderr}
   cp $MY_HOME/share/web/{index.html,style.css} /mnt/mynfs/infolog/mytopling-instance-2
@@ -59,7 +59,7 @@ common_args=(
   --enforce-gtid-consistency=ON
   --socket=$MYSQL_SOCK_DIR/mysql.sock
   --user=mysql
-  --datadir=${MYTOPLING_DATA_DIR}
+  --datadir=${MYTOPLING_SLAVE_DATA_DIR}
   --bind-address=0.0.0.0
   --disabled_storage_engines=myisam
   --host_cache_size=644
@@ -113,8 +113,6 @@ binlog_args=(
 sudo ln -sf $MYTOPLING_LOG_DIR $MYTOPLING_LOG_DIR/.rocksdb
 sudo ln -sf $MYTOPLING_LOG_DIR/mnt_mynfs_datadir_mytopling-instance-2_.rocksdb_LOG \
            $MYTOPLING_LOG_DIR/LOG
-rm -rf ${MYTOPLING_DATA_DIR}/.rocksdb/job*
-rm -f /tmp/Topling-*
 
 sudo sysctl -w fs.file-max=33554432
 sudo sysctl -w fs.nr_open=2097152
