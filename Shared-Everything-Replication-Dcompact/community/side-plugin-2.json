@@ -251,7 +251,7 @@
           "transaction_lock_timeout": 2000,
           "custom_mutex_factory": "${mtx_fac}"
         },
-        "secondary_path":"/mnt/mynfs/datadir/mytopling-instance-1/.rocksdb",
+        "secondary_path":"/mnt/mynfs/infolog/mytopling-instance-2",
         "column_families": {
           "default": "${default}",
           "__system__": "${__system__}"
