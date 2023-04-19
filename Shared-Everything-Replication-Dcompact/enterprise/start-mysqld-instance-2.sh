@@ -37,26 +37,17 @@ fi
 MYSQL_SOCK_DIR=/var/lib/mysql
 mkdir -p $MYSQL_SOCK_DIR # for sock file
 export LD_LIBRARY_PATH=/mnt/mynfs/opt/lib
-if [ ! -e /mnt/mynfs/datadir/mytopling-instance-2/.rocksdb/IDENTITY ]; then
-  if [ -e /mnt/mynfs/datadir ]; then
-    echo "Dir '/mnt/mynfs/datadir' exists, but '/mnt/mynfs/datadir/mytopling-instance-2/.rocksdb/IDENTITY' does not exists"
-    read -p 'Are you sure delete /mnt/mynfs/datadir and re-initialize database? yes(y)/no(n)' yn
-    if [ "$yn" != "y" ]; then
-      exit 1
-    fi
-    rm -rf /mnt/mynfs/{log-bin,wal,infolog}
-    rm -rf /mnt/mynfs/datadir/mytopling-instance-2/* 
-    rm -rf /mnt/mynfs/datadir/mytopling-instance-2/.rocksdb  
-  fi
-  mkdir -p /mnt/mynfs/{datadir,log-bin,wal,infolog}/mytopling-instance-2
-  chown mysql:mysql -R /mnt/mynfs/{datadir,log-bin,wal}/mytopling-instance-2
-  /mnt/mynfs/opt/bin/mysqld --initialize-insecure --skip-grant-tables \
-      --datadir=/mnt/mynfs/datadir/mytopling-instance-2
+
+if [! -d mnt/mynfs/dataidr ];then
+  rm -rf /mnt/mynfs/{infolog,datadir}/mytopling-instance-2
+  mkdir -p /mnt/mynfs/{datadir,infolog}/mytopling-instance-2
+  cp -a $MYTOPLING_DATA_DIR/* $MYTOPLING_SLAVE_DATA_DIR/
+  sed -i "%s/^server-uuid.*/server-uuid=`uuidgen`/g" $MYTOPLING_SLAVE_DATA_DIR/auto.cnf
   mkdir $MYTOPLING_LOG_DIR/stdlog -p
   touch $MYTOPLING_LOG_DIR/stdlog/{stdout,stderr}
   cp $MY_HOME/share/web/{index.html,style.css} /mnt/mynfs/infolog/mytopling-instance-2
-  chown mysql:mysql -R /mnt/mynfs/{datadir,log-bin,wal,infolog}/mytopling-instance-2 # must
-  chown mysql:mysql -R $MYSQL_SOCK_DIR
+  chown mysql:mysql -R /mnt/mynfs/{datadir,infolog}/mytopling-instance-2 # must
+  chown mysql:mysql -R /var/lib/mysql
 fi
 
 
