@@ -126,7 +126,7 @@ ulimit -n 100000  # normal user
 ulimit -n 1000000 # root user
 # 检测可执行文件:
 binary_path="/mnt/mynfs/opt/lib/librocksdb.so"
-symbol_name="_ZN7rocksdb10tzb_detail13g_startupTimeE"
+symbol_name="git_version_hash_info_topling_rocks"
 line=`nm -D $binary_path | grep  $symbol_name`
 # Check if the symbol does not exist in the binary file
 if [ $(echo $line | awk '{print NF}') -eq 2 ]; then
