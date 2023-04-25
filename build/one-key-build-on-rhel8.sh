@@ -27,6 +27,7 @@ fi
 sudo yum config-manager --set-enabled powertools
 yum install epel-release -y
 sudo yum install -y liburing-devel git gflags-devel libcurl-devel \
+    snappy-devel zlib-devel bzip2-devel lz4-devel \
     libaio-devel cmake nfs-utils openssl-devel ncurses-devel libtirpc-devel \
     rpcgen bison libudev-devel gcc-toolset-12-gcc-c++
 source  scl_source enable gcc-toolset-12

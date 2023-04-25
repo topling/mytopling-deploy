@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: dcompact
-        image: topling/dcompact:v0.1.11
+        image: registry.mytopling.in:5000/topling/dcompact-community:v0.0.1
         env:
         - name: WEB_DOMAIN
           value: "mytopling.in"
@@ -26,11 +26,11 @@ spec:
            - SYS_ADMIN
         ports:
         - containerPort: 8000
-        #resources:
-        #  limits:
-        #    cpu: 16
-        #    memory: 32G
-# 可以取消上面的注释, 限制每个POD的最大资源用量
+        resources:
+         limits:
+           cpu: 16
+           memory: 32G
+        # 可以修改上面配置降低物理机最低配置需求
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -50,7 +50,7 @@ spec:
     spec:
       containers:
       - name: forward-nginx
-        image: topling/forward-nginx:v0.0.1
+        image: registry.mytopling.in:5000/topling/forward-nginx:v0.0.1
         ports:
         - containerPort: 8000
         resources:

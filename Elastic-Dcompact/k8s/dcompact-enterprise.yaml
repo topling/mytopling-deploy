@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dcompact-deployment
+  labels:
+    app: dcompact
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dcompact
+  template:
+    metadata:
+      labels:
+        app: dcompact
+    spec:
+      containers:
+      - name: dcompact
+        image: topling/dcompact-enterprise:v0.1.11
+        env:
+        - name: WEB_DOMAIN
+          value: "mytopling.in"
+        securityContext:
+          capabilities:
+           add:
+           - SYS_ADMIN
+        ports:
+        - containerPort: 8000
+        resources:
+         limits:
+           cpu: 16
+           memory: 32G
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forward-nginx
+  labels:
+    app: forward-nginx
+spec:
+  replicas: 2 # 转发服务器数量
+  selector:
+    matchLabels:
+      app: forward-nginx
+  template:
+    metadata:
+      labels:
+        app: forward-nginx
+    spec:
+      containers:
+      - name: forward-nginx
+        image: topling/forward-nginx:v0.0.1
+        ports:
+        - containerPort: 8000
+        resources:
+            cpu: 16
+            memory: 32G
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  labels:
+    app: nginx
+spec:
+  type: NodePort 
+  selector:
+    app: forward-nginx
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000
+    nodePort: 30001 # labour forward port
+  sessionAffinity: None
+  externalTrafficPolicy: Cluster
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dcompact-service
+  labels:
+    app: dcompact
+spec:
+  type: NodePort 
+  selector:
+    app: dcompact
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000
+    nodePort: 30000 # dcompact round robin port
+  sessionAffinity: None
+  externalTrafficPolicy: Cluster
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: dcompact-hpa
+  labels:
+    app: dcompact
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: dcompact-deployment
+  minReplicas: 2 # 最小 Node 数量
+  maxReplicas: 10 # 最大 Node 数量
+  targetCPUUtilizationPercentage: 80 # 目标 CPU 使用率
