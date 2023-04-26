@@ -105,6 +105,7 @@ binlog_args=(
   # 但此配置下 MyTopling 不能做为传统 MySQL 主从中的上游数据库，因为此
   # 配置下 binlog 只会记录 DDL 操作
   #--binlog-ddl-only=ON
+  --binlog_ddl_only_follower=ON
   --binlog-order-commits=ON
   --disable-log-bin
 )
