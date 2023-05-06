@@ -22,7 +22,7 @@ DOCUMENT_ROOT=/mnt/mynfs/infolog/dcompact-worker-1
 export CPU_CORE_COUNT=`nproc`
 export MAX_PARALLEL_COMPACTIONS=$[$CPU_CORE_COUNT * 1]
 export MAX_WAITING_COMPACTIONS=$[$CPU_CORE_COUNT * 2]
-export WORKER_DB_ROOT=$DOCUMENT_ROOT/worker
+export WORKER_DB_ROOT=$DOCUMENT_ROOT #/worker
 export NFS_MOUNT_ROOT=/mnt/mynfs/datadir
 
 STD_ROOT=$DOCUMENT_ROOT/stdlog
